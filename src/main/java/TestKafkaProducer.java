@@ -9,7 +9,7 @@ import java.util.Random;
 public class TestKafkaProducer {
     public static void main(String[] args) {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.10.1.94:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.BOOTSTRAP_SERVERS_CONFIG);
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.RETRIES_CONFIG, 0);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
@@ -20,7 +20,7 @@ public class TestKafkaProducer {
         Random rnd = new Random();
         for (long i = 0; i < 100 ; i++) {
             ProducerRecord<String, String> data = new ProducerRecord<String, String>(
-                    "my-topic-2", "key-"+i, "message-"+i );
+                    KafkaConstants.TEST_TOPIC, "key-"+i, "message-"+i );
             producer.send(data, callback);
         }
 

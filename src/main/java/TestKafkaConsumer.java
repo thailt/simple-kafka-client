@@ -10,8 +10,8 @@ public class TestKafkaConsumer {
   public static void main(String[] args) {
 
     Properties consumerConfig = new Properties();
-    consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.10.1.94:9092");
-    consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "my-group");
+    consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.BOOTSTRAP_SERVERS_CONFIG);
+    consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "my-group-test");
     consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
     consumerConfig.put(
         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
@@ -21,10 +21,10 @@ public class TestKafkaConsumer {
         "org.apache.kafka.common.serialization.StringDeserializer");
     KafkaConsumer<byte[], byte[]> consumer = new KafkaConsumer<>(consumerConfig);
     LogConsumerListener rebalanceListener = new LogConsumerListener();
-    consumer.subscribe(Collections.singletonList("test-topic-res"), rebalanceListener);
+    consumer.subscribe(Collections.singletonList(KafkaConstants.TEST_TOPIC), rebalanceListener);
 
     while (true) {
-      ConsumerRecords<byte[], byte[]> records = consumer.poll(Duration.ofMillis(10000));
+      ConsumerRecords<byte[], byte[]> records = consumer.poll(1000);
       System.out.println("receive " + records.count());
       for (ConsumerRecord<byte[], byte[]> record : records) {
         System.out.printf(
